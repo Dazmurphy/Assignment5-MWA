@@ -19,88 +19,91 @@ import assign.services.DBLoader;
 
 @Path("/myeavesdrop")
 public class ProjectResource {
-	
+
 	DBLoader dbLoader;
-	
+
 	public ProjectResource() {
-		dbLoader = new DBLoader();		
+		dbLoader = new DBLoader();
 	}
-	
+
 	@POST
 	@Path("/projects")
 	@Consumes(MediaType.APPLICATION_XML)
 	public Response postProject(Project p) throws Exception {
-		
-		if(p.getDescription().equals("") || p.getName().equals("") || p.getName().trim().length() == 0 || p.getDescription().trim().length() == 0){
+
+		if (p.getDescription().equals("") || p.getName().equals("") || p.getName().trim().length() == 0
+				|| p.getDescription().trim().length() == 0) {
 			return Response.status(400).build();
 		}
-		
-		//need to add project to db using dbloader
+
+		// need to add project to db using dbloader
 		dbLoader.addProject(p);
-		
+
 		URI uri = new URI("http://localhost:8080/assignment5/myeavesdrop/projects/" + p.getId());
 		return Response.created(uri).build();
 	}
-	
+
 	@POST
 	@Path("/projects/{projectId}/meetings")
 	@Consumes(MediaType.APPLICATION_XML)
-	public Response postMeeting(Meeting m, @PathParam("projectId") Long projectId) throws Exception{
-		
-		if(m.getName().equals("") || m.getYear() == null || m.getName().trim().length() == 0){
+	public Response postMeeting(Meeting m, @PathParam("projectId") Long projectId) throws Exception {
+
+		if (m.getName().equals("") || m.getYear() == null || m.getName().trim().length() == 0) {
 			return Response.status(400).build();
-		}else if(!dbLoader.projectIdExists(projectId)){
+		} else if (!dbLoader.projectIdExists(projectId)) {
 			return Response.status(404).build();
 		}
-		
+
 		dbLoader.addMeeting(m, projectId);
-		
-		URI uri = new URI("http://localhost:8080/assignment5/myeavesdrop/projects/" + projectId + "/meetings/" + m.getId());
-		
+
+		URI uri = new URI(
+				"http://localhost:8080/assignment5/myeavesdrop/projects/" + projectId + "/meetings/" + m.getId());
+
 		return Response.created(uri).build();
 	}
-	
+
 	@GET
 	@Path("/projects/{projectId}")
 	@Produces("application/xml")
 	public Response getProject(@PathParam("projectId") Long projectId) throws Exception {
-		
-		if(!dbLoader.projectIdExists(projectId)){
+
+		if (!dbLoader.projectIdExists(projectId)) {
 			return Response.status(404).build();
 		}
-		
+
 		Project p = dbLoader.getProject(projectId);
-		
+
 		return Response.ok(p, MediaType.APPLICATION_XML).build();
 	}
-	
+
 	@PUT
 	@Path("/projects/{projectId}/meetings/{meetingId}")
 	@Consumes(MediaType.APPLICATION_XML)
-	public Response updateMeeting(@PathParam("projectId") Long projectId, @PathParam("meetingId") Long meetingId, Meeting m) throws Exception{
-		
-		if(m.getName().equals("") || m.getYear() == null || m.getName().trim().length() == 0){
+	public Response updateMeeting(@PathParam("projectId") Long projectId, @PathParam("meetingId") Long meetingId,
+			Meeting m) throws Exception {
+
+		if (m.getName().equals("") || m.getYear() == null || m.getName().trim().length() == 0) {
 			return Response.status(400).build();
-		}else if(!dbLoader.projectIdExists(projectId) || !dbLoader.projectHasMeeting(meetingId, projectId)){
+		} else if (!dbLoader.projectIdExists(projectId) || !dbLoader.projectHasMeeting(meetingId, projectId)) {
 			return Response.status(404).build();
 		}
-		
+
 		dbLoader.updateMeeting(projectId, meetingId, m);
-		
+
 		return Response.ok().build();
 	}
-	
+
 	@DELETE
 	@Path("/projects/{projectId}")
-	public Response deleteProject(@PathParam("projectId") Long projectId) throws Exception{
-		
-		if(!dbLoader.projectIdExists(projectId)){
+	public Response deleteProject(@PathParam("projectId") Long projectId) throws Exception {
+
+		if (!dbLoader.projectIdExists(projectId)) {
 			return Response.status(404).build();
 		}
-		
+
 		dbLoader.deleteProject(projectId);
-		
+
 		return Response.ok().build();
-		
+
 	}
 }
