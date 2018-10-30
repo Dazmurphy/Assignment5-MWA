@@ -22,63 +22,63 @@ import org.hibernate.annotations.CascadeType;
 @XmlRootElement(name = "project")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name="project")
+@Table(name = "project")
 public class Project {
-	
+
 	@XmlElement
 	private String name;
-	
+
 	@XmlElement
 	private String description;
-	
+
 	@XmlAttribute
 	private Long id;
-	
-	@XmlElementWrapper(name ="meetings")
+
+	@XmlElementWrapper(name = "meetings")
 	private Set<Meeting> meeting;
-	
-	public Project(){
-		
+
+	public Project() {
+
 	}
 
-	public Project(String name, String description){
+	public Project(String name, String description) {
 		this.name = name;
 		this.description = description;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public String getDescription(){
+
+	public String getDescription() {
 		return description;
 	}
-	
-	public void setDescription(String description){
+
+	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	public Long getId(){
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	public Long getId() {
 		return id;
 	}
-	
-	public void setId(Long id){
+
+	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy="project")
-	@Cascade({CascadeType.DELETE})
-	public Set<Meeting> getMeetings(){
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "project")
+	@Cascade({ CascadeType.DELETE })
+	public Set<Meeting> getMeetings() {
 		return this.meeting;
 	}
-	
-	public void setMeetings(Set<Meeting> meetings){
+
+	public void setMeetings(Set<Meeting> meetings) {
 		this.meeting = meetings;
 	}
 }

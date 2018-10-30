@@ -19,61 +19,61 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "meeting")
 public class Meeting {
-	
+
 	@XmlAttribute
 	private Long id;
-	
+
 	@XmlElement
 	private String name;
-	
+
 	@XmlElement
 	private Long year;
-	
+
 	@XmlTransient
 	private Project project;
-	
-	public Meeting(){
-		
+
+	public Meeting() {
+
 	}
-	
-	public Meeting(String name, Long year){
+
+	public Meeting(String name, Long year) {
 		this.name = name;
 		this.year = year;
 	}
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	public Long getId(){
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	public Long getId() {
 		return id;
 	}
-	
-	public void setId(Long id){
+
+	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	public String getName(){
+
+	public String getName() {
 		return name;
 	}
-	
-	public void setName(String name){
+
+	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public Long getYear(){
+
+	public Long getYear() {
 		return year;
 	}
-	
-	public void setYear(Long year){
+
+	public void setYear(Long year) {
 		this.year = year;
 	}
-	
+
 	@ManyToOne
 	@JoinColumn(name = "projectId")
-	public Project getProject(){
+	public Project getProject() {
 		return this.project;
 	}
-	
-	public void setProject(Project p){
+
+	public void setProject(Project p) {
 		this.project = p;
 	}
 }
